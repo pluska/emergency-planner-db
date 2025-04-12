@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Import routes
+const usersRouter = require('./routes/users');
 const profilesRouter = require('./routes/profiles');
 const plansRouter = require('./routes/plans');
 
@@ -25,79 +26,9 @@ pool.query('SELECT NOW()', (err, res) => {
 });
 
 // Routes
+app.use('/api/users', usersRouter);
 app.use('/api/profiles', profilesRouter);
 app.use('/api/plans', plansRouter);
-
-// Basic user routes (keeping these in main file for simplicity)
-app.get('/api/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/api/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query('SELECT * FROM users WHERE user_id = $1', [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.post('/api/users', async (req, res) => {
-  try {
-    const { username, email, password_hash } = req.body;
-    const result = await pool.query(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *',
-      [username, email, password_hash]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.put('/api/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { username, email, password_hash } = req.body;
-    const result = await pool.query(
-      'UPDATE users SET username = $1, email = $2, password_hash = $3 WHERE user_id = $4 RETURNING *',
-      [username, email, password_hash, id]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.delete('/api/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query('DELETE FROM users WHERE user_id = $1 RETURNING *', [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json({ message: 'User deleted successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // Start server
 app.listen(port, () => {
