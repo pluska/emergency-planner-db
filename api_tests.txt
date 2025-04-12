@@ -1,0 +1,102 @@
+# Users API Endpoints
+
+# Get all users
+curl http://localhost:3000/api/users
+
+# Get user by ID
+curl http://localhost:3000/api/users/1
+
+# Create new user
+curl -X POST http://localhost:3000/api/users \
+-H "Content-Type: application/json" \
+-d '{"username": "test_user", "email": "test@example.com", "password_hash": "hashed_password"}'
+
+# Update user
+curl -X PUT http://localhost:3000/api/users/1 \
+-H "Content-Type: application/json" \
+-d '{"username": "updated_user", "email": "updated@example.com", "password_hash": "new_hashed_password"}'
+
+# Delete user
+curl -X DELETE http://localhost:3000/api/users/1
+
+# Profiles API Endpoints
+
+# Get all profiles
+curl http://localhost:3000/api/profiles
+
+# Get profile by ID
+curl http://localhost:3000/api/profiles/1
+
+# Create new profile
+curl -X POST http://localhost:3000/api/profiles \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 1,
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone_number": "+1234567890",
+  "address": "123 Test St"
+}'
+
+# Update profile
+curl -X PUT http://localhost:3000/api/profiles/1 \
+-H "Content-Type: application/json" \
+-d '{
+  "first_name": "Updated",
+  "last_name": "Name",
+  "phone_number": "+1987654321",
+  "address": "456 New St"
+}'
+
+# Delete profile
+curl -X DELETE http://localhost:3000/api/profiles/1
+
+# Plans API Endpoints
+
+# Get all plans
+curl http://localhost:3000/api/plans
+
+# Get plan by ID
+curl http://localhost:3000/api/plans/1
+
+# Create new plan
+curl -X POST http://localhost:3000/api/plans \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 1,
+  "plan_name": "Test Plan",
+  "plan_description": "A test emergency plan",
+  "emergency_contacts": [
+    {"name": "Emergency Services", "phone": "911"},
+    {"name": "Local Hospital", "phone": "+1234567890"}
+  ],
+  "evacuation_routes": [
+    {"route": "Main Exit", "description": "Front door"},
+    {"route": "Backup Exit", "description": "Back door"}
+  ],
+  "supplies_list": [
+    {"item": "First Aid Kit", "quantity": 1},
+    {"item": "Water", "quantity": 6}
+  ]
+}'
+
+# Update plan
+curl -X PUT http://localhost:3000/api/plans/1 \
+-H "Content-Type: application/json" \
+-d '{
+  "plan_name": "Updated Plan",
+  "plan_description": "An updated emergency plan",
+  "emergency_contacts": [
+    {"name": "Updated Emergency", "phone": "911"},
+    {"name": "Updated Hospital", "phone": "+1987654321"}
+  ],
+  "evacuation_routes": [
+    {"route": "Updated Exit", "description": "Updated route"}
+  ],
+  "supplies_list": [
+    {"item": "Updated Kit", "quantity": 2}
+  ]
+}'
+
+# Delete plan
+curl -X DELETE http://localhost:3000/api/plans/1 

@@ -1,0 +1,122 @@
+# Demonstrating Table Relationships
+
+# 1. First, create a user
+curl -X POST http://localhost:3000/api/users \
+-H "Content-Type: application/json" \
+-d '{"username": "demo_user", "email": "demo@example.com", "password_hash": "demo_password"}'
+
+# Note the user_id from the response (let's assume it's 1)
+
+# 2. Create a profile for that user
+curl -X POST http://localhost:3000/api/profiles \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 1,
+  "first_name": "Demo",
+  "last_name": "User",
+  "phone_number": "+1234567890",
+  "address": "123 Demo St"
+}'
+
+# 3. Create multiple emergency plans for the same user
+# First plan
+curl -X POST http://localhost:3000/api/plans \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 1,
+  "plan_name": "Home Emergency Plan",
+  "plan_description": "Primary emergency plan for home",
+  "emergency_contacts": [
+    {"name": "Local Police", "phone": "911"},
+    {"name": "Nearest Hospital", "phone": "+1234567890"}
+  ],
+  "evacuation_routes": [
+    {"route": "Main Exit", "description": "Front door"},
+    {"route": "Backup Exit", "description": "Back door"}
+  ],
+  "supplies_list": [
+    {"item": "First Aid Kit", "quantity": 1},
+    {"item": "Water", "quantity": 6}
+  ]
+}'
+
+# Second plan
+curl -X POST http://localhost:3000/api/plans \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 1,
+  "plan_name": "Work Emergency Plan",
+  "plan_description": "Office building evacuation plan",
+  "emergency_contacts": [
+    {"name": "Building Security", "phone": "+1987654321"},
+    {"name": "HR Department", "phone": "+1234567890"}
+  ],
+  "evacuation_routes": [
+    {"route": "Main Stairwell", "description": "Floor 5 to ground"},
+    {"route": "Emergency Exit", "description": "Fire escape route"}
+  ],
+  "supplies_list": [
+    {"item": "Emergency Flashlight", "quantity": 1},
+    {"item": "Whistle", "quantity": 1}
+  ]
+}'
+
+# 4. Query the relationships
+
+# Get user with their profile
+curl http://localhost:3000/api/users/1
+curl http://localhost:3000/api/profiles?user_id=1
+
+# Get all plans for a specific user
+curl http://localhost:3000/api/plans?user_id=1
+
+# 5. Demonstrate cascading delete (when user is deleted, their profile and plans are also deleted)
+curl -X DELETE http://localhost:3000/api/users/1
+
+# Verify that related records are deleted
+curl http://localhost:3000/api/profiles?user_id=1
+curl http://localhost:3000/api/plans?user_id=1
+
+# 6. Create another user with a complete set of related data
+curl -X POST http://localhost:3000/api/users \
+-H "Content-Type: application/json" \
+-d '{"username": "another_user", "email": "another@example.com", "password_hash": "another_password"}'
+
+# Note the new user_id (let's assume it's 2)
+
+# Create profile
+curl -X POST http://localhost:3000/api/profiles \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 2,
+  "first_name": "Another",
+  "last_name": "User",
+  "phone_number": "+1987654321",
+  "address": "456 Another St"
+}'
+
+# Create plan
+curl -X POST http://localhost:3000/api/plans \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": 2,
+  "plan_name": "Family Emergency Plan",
+  "plan_description": "Comprehensive family emergency plan",
+  "emergency_contacts": [
+    {"name": "Family Doctor", "phone": "+1234567890"},
+    {"name": "School Emergency", "phone": "+1987654321"}
+  ],
+  "evacuation_routes": [
+    {"route": "Primary Meeting Point", "description": "Front yard tree"},
+    {"route": "Secondary Meeting Point", "description": "Neighbor house"}
+  ],
+  "supplies_list": [
+    {"item": "Emergency Radio", "quantity": 1},
+    {"item": "Medications", "quantity": 1}
+  ]
+}'
+
+# 7. Query all data to see the relationships
+curl http://localhost:3000/api/users
+curl http://localhost:3000/api/profiles
+curl http://localhost:3000/api/plans 

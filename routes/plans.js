@@ -28,6 +28,18 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Get plans by user_id
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const result = await pool.query('SELECT * FROM plans WHERE user_id = $1', [user_id]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Create new plan
 router.post('/', async (req, res) => {
   try {
