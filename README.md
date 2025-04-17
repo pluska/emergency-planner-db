@@ -4,7 +4,7 @@ This project is an Emergency Planner API that helps users manage their emergency
 
 The system demonstrates proper database design principles with well-defined relationships between tables and appropriate constraints to maintain data integrity. It serves as a practical example of building a RESTful API with proper database relationships and data validation.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/Pn_QiVdNPmY)
 
 # Relational Database
 

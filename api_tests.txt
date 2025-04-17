@@ -66,18 +66,24 @@ curl -X POST http://localhost:3000/api/plans \
   "user_id": 1,
   "plan_name": "Test Plan",
   "plan_description": "A test emergency plan",
-  "emergency_contacts": [
-    {"name": "Emergency Services", "phone": "911"},
-    {"name": "Local Hospital", "phone": "+1234567890"}
-  ],
-  "evacuation_routes": [
-    {"route": "Main Exit", "description": "Front door"},
-    {"route": "Backup Exit", "description": "Back door"}
-  ],
-  "supplies_list": [
-    {"item": "First Aid Kit", "quantity": 1},
-    {"item": "Water", "quantity": 6}
-  ]
+  "emergency_contacts": {
+    "contacts": [
+      {"name": "Emergency Services", "phone": "911"},
+      {"name": "Local Hospital", "phone": "+1234567890"}
+    ]
+  },
+  "evacuation_routes": {
+    "routes": [
+      {"route": "Main Exit", "description": "Front door"},
+      {"route": "Backup Exit", "description": "Back door"}
+    ]
+  },
+  "supplies_list": {
+    "supplies": [
+      {"item": "First Aid Kit", "quantity": 1},
+      {"item": "Water", "quantity": 6}
+    ]
+  }
 }'
 
 # Update plan
@@ -86,16 +92,22 @@ curl -X PUT http://localhost:3000/api/plans/1 \
 -d '{
   "plan_name": "Updated Plan",
   "plan_description": "An updated emergency plan",
-  "emergency_contacts": [
-    {"name": "Updated Emergency", "phone": "911"},
-    {"name": "Updated Hospital", "phone": "+1987654321"}
-  ],
-  "evacuation_routes": [
-    {"route": "Updated Exit", "description": "Updated route"}
-  ],
-  "supplies_list": [
-    {"item": "Updated Kit", "quantity": 2}
-  ]
+  "emergency_contacts": {
+    "contacts": [
+      {"name": "Updated Emergency", "phone": "911"},
+      {"name": "Updated Hospital", "phone": "+1987654321"}
+    ]
+  },
+  "evacuation_routes": {
+    "routes": [
+      {"route": "Updated Exit", "description": "Updated route"}
+    ]
+  },
+  "supplies_list": {
+    "supplies": [
+      {"item": "Updated Kit", "quantity": 2}
+    ]
+  }
 }'
 
 # Delete plan
